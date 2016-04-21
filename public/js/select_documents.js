@@ -1,4 +1,4 @@
-//= require jquery
+//= require jquery.js
 //= require jquery.validate
 
 (function () {

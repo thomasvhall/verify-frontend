@@ -36,7 +36,10 @@
 <% end %>
 
 <% content_for :body_end do %>
-
-  <%= javascript_include_tag 'application' %>
+    <script src="js/jspm_packages/system.js"></script>
+    <script src="js/jspm-config.js"></script>
+    <script>
+      System.import('js/application.js');
+    </script>
 <% end %>
 <%= render file: 'layouts/govuk_template' %>

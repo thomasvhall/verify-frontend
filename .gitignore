@@ -16,3 +16,8 @@
 
 .DS_Store
 /spec/pacts
+
+node_modules/
+vendor/assets/javascripts/build/
+vendor/assets/javascripts/jspm_packages/
+public/js/jspm_packages/
