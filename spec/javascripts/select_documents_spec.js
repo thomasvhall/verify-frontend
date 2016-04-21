@@ -1,7 +1,3 @@
-//= require jquery
-//= require jquery.validate
-//= require validation
-//= require select_documents
 
 describe("Select Documents Form", function () {
 

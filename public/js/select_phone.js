@@ -1,51 +1,49 @@
-(function () {
-  "use strict";
-  var root = this,
-    $ = root.jQuery;
-  if(typeof root.GOVUK === 'undefined') { root.GOVUK = {}; }
+import 'jquery';
 
-  var selectPhone = {
-    toggleSecondaryQuestion: function() {
-      var mobilePhoneState = $('input[name="select_phone_form[mobile_phone]"]:checked').val();
-      if (mobilePhoneState === undefined) {
-        selectPhone.$smartphoneQuestion.add(selectPhone.$landlineQuestion)
-          .addClass('js-hidden', true)
-          .find('.selected').removeClass('selected').find('input').prop('checked',false);
-      } else if (mobilePhoneState === 'true') {
-        selectPhone.$smartphoneQuestion.removeClass('js-hidden');
-        selectPhone.$landlineQuestion.addClass('js-hidden').removeClass('error')
-          .find('.selected').removeClass('selected').find('input').prop('checked',false);
-      } else if (mobilePhoneState === 'false') {
-        selectPhone.$smartphoneQuestion.addClass('js-hidden').removeClass('error')
-          .find('.selected').removeClass('selected').find('input').prop('checked',false);
-        selectPhone.$landlineQuestion.removeClass('js-hidden');
-      }
-      selectPhone.$form.find('.form-group').removeClass('error');
-      selectPhone.validator.resetForm();
-    },
-    init: function (){
-      selectPhone.$form = $('#validate-phone');
-      selectPhone.$smartphoneQuestion = $('#smartphone-question');
-      selectPhone.$landlineQuestion = $('#landline-question');
-      var errorMessage = selectPhone.$form.data('msg');
-      if (selectPhone.$form.length === 1) {
-        selectPhone.validator = selectPhone.$form.validate({
-          rules: {
-            'select_phone_form[mobile_phone]': 'required',
-            'select_phone_form[smart_phone]': 'required',
-            'select_phone_form[landline]': 'required'
-          },
-          messages: {
-            'select_phone_form[mobile_phone]': errorMessage,
-            'select_phone_form[smart_phone]': errorMessage,
-            'select_phone_form[landline]': errorMessage
-          }
-        });
-        selectPhone.$form.find('input[name="select_phone_form[mobile_phone]"]').on('click',selectPhone.toggleSecondaryQuestion);
-        selectPhone.toggleSecondaryQuestion();
-      }
-    }
-  };
+let $form,
+  validator,
+  $smartphoneQuestion,
+  $landlineQuestion;
 
-  root.GOVUK.selectPhone = selectPhone;
-}).call(this);
+function toggleSecondaryQuestion () {
+  var mobilePhoneState = $('input[name="select_phone_form[mobile_phone]"]:checked').val();
+  if (mobilePhoneState === undefined) {
+    $smartphoneQuestion.add($landlineQuestion)
+      .addClass('js-hidden', true)
+      .find('.selected').removeClass('selected').find('input').prop('checked',false);
+  } else if (mobilePhoneState === 'true') {
+    $smartphoneQuestion.removeClass('js-hidden');
+    $landlineQuestion.addClass('js-hidden').removeClass('error')
+      .find('.selected').removeClass('selected').find('input').prop('checked',false);
+  } else if (mobilePhoneState === 'false') {
+    $smartphoneQuestion.addClass('js-hidden').removeClass('error')
+      .find('.selected').removeClass('selected').find('input').prop('checked',false);
+    $landlineQuestion.removeClass('js-hidden');
+  }
+  $form.find('.form-group').removeClass('error');
+  validator.resetForm();
+}
+
+export function init (){
+  $form = $('#validate-phone');
+  $smartphoneQuestion = $('#smartphone-question');
+  $landlineQuestion = $('#landline-question');
+  var errorMessage = $form.data('msg');
+  if ($form.length === 1) {
+    validator = $form.validate({
+      rules: {
+        'select_phone_form[mobile_phone]': 'required',
+        'select_phone_form[smart_phone]': 'required',
+        'select_phone_form[landline]': 'required'
+      },
+      messages: {
+        'select_phone_form[mobile_phone]': errorMessage,
+        'select_phone_form[smart_phone]': errorMessage,
+        'select_phone_form[landline]': errorMessage
+      }
+    });
+    $form.find('input[name="select_phone_form[mobile_phone]"]').on('click', toggleSecondaryQuestion);
+    toggleSecondaryQuestion();
+  }
+}
+

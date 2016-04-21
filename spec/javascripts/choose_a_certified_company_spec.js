@@ -1,5 +1,3 @@
-//= require jquery
-//= require choose_a_certified_company
 
 describe("Choose a certified company", function () {
 

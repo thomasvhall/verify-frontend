@@ -1,6 +1,3 @@
-//= require jquery
-//= require sign_in
-//= require mock-ajax
 
 describe('The sign in page', function () {
   var $dom,

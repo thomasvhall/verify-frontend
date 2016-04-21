@@ -17,6 +17,7 @@ System.config({
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "core-js": "npm:core-js@1.2.6",
+    "govuk_frontend_toolkit": "npm:govuk_frontend_toolkit@4.10.0",
     "jquery": "npm:jquery@2.2.3",
     "jquery-validation": "github:jzaefferer/jquery-validation@1.15.0",
     "github:jspm/nodelibs-assert@0.1.0": {

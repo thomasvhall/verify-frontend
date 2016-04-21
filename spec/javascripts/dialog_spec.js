@@ -1,6 +1,3 @@
-//= require jquery
-//= require trap
-//= require dialog
 
 describe("Dialog", function () {
 
