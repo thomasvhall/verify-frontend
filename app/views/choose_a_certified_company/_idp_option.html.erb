@@ -1,4 +1,7 @@
 <div class="idp-choice">
+  <% if identity_provider.accessibility_warning.present? %>
+    <p class="visually-hidden"><%= identity_provider.accessibility_warning %></p>
+  <% end %>
   <div class="company-logo">
     <%= image_tag identity_provider.logo_path, alt: '' %>
     <p class="company-about">

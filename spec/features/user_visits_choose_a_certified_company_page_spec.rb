@@ -102,4 +102,12 @@ RSpec.describe 'When the user visits the choose a certified company page' do
     expect(page).to have_title 'Dewiswch gwmni ardystiedig - GOV.UK Verify - GOV.UK'
     expect(page).to have_css 'html[lang=cy]'
   end
+
+  it 'displays accessibility warnings to screenreaders' do
+    entity_id = 'http://idcorp.com'
+    stub_federation(entity_id)
+    visit '/choose-a-certified-company'
+    expect(page).to have_css('.idp-choice>.visually-hidden',
+      text: 'IDCorp will require you to download an app to scan a code with your phone’s camera.')
+  end
 end

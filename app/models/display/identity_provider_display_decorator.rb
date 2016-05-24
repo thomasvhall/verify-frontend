@@ -29,9 +29,10 @@ module Display
       special_no_docs_instructions = decorate_special_no_docs_instructions(simple_id)
       no_docs_requirement = decorate_no_docs_requirement(simple_id)
       contact_details = @translator.translate("idps.#{simple_id}.contact_details")
+      accessibility_warning = decorate_accessibility_warning(simple_id)
       ViewableIdentityProvider.new(idp, name, tagline, logo_path, white_logo_path,
                                    about, requirements, special_no_docs_instructions,
-                                   no_docs_requirement, contact_details)
+                                   no_docs_requirement, contact_details, accessibility_warning)
     rescue FederationTranslator::TranslationError => e
       Rails.logger.error(e)
       not_viewable(idp)
@@ -57,6 +58,12 @@ module Display
       @translator.translate("idps.#{simple_id}.no_docs_requirement")
     rescue FederationTranslator::TranslationError
       ''
+    end
+
+    def decorate_accessibility_warning(simple_id)
+      @translator.translate("idps.#{simple_id}.accessibility_warning")
+    rescue FederationTranslator::TranslationError
+      nil
     end
   end
 end

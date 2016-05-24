@@ -9,7 +9,8 @@ module Display
     :requirements,
     :special_no_docs_instructions,
     :no_docs_requirement,
-    :contact_details
+    :contact_details,
+    :accessibility_warning
   ) do
     delegate :entity_id, to: :identity_provider
     delegate :simple_id, to: :identity_provider

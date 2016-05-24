@@ -25,6 +25,7 @@ en:
           <br/>Saturday and Sunday, 8am to 5pm
           <br/>Closed on bank holidays
         </p>
+      accessibility_warning: IDCorp will require you to download an app to scan a code with your phone’s camera.
 cy:
   idps:
     stub-idp-one:
@@ -46,3 +47,4 @@ cy:
           <br/>Saturday and Sunday, 8am to 5pm
           <br/>Closed on bank holidays
         </p>
+      accessibility_warning: IDCorp will require you to download an app to scan a code with your phone’s camera.
