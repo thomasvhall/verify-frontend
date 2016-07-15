@@ -5,7 +5,8 @@ class VerifyFormBuilder < ActionView::Helpers::FormBuilder
   def block_label key, value, text, attributes = {}
     label "#{key}_#{value.to_s.parameterize}", class: 'block-label', onclick: '' do
       radio = radio_button key, value, attributes
-      "#{radio} <span><span class=\"inner\">&nbsp;</span></span> #{text}".html_safe
+      buffer_span = @template.content_tag(:span, @template.content_tag(:span, '&nbsp;'.html_safe, class: "inner"))
+      radio + ' ' + buffer_span + ' ' + text
     end
   end
 end
