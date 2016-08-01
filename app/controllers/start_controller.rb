@@ -3,6 +3,14 @@ class StartController < ApplicationController
 
   def index
     @form = StartForm.new({})
+    unless cookies[:ab_test]
+      res = MyRandom.rand
+      if res <= 50
+        cookies[:ab_test] = 'a'
+      else
+        cookies[:ab_test] = 'a'
+      end
+    end
   end
 
   def request_post
