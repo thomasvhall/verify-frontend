@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   post 'SAML2/SSO/Response/POST' => 'authn_response#idp_response'
   match "/404", to: "errors#page_not_found", via: :all
 
+  mount Split::Dashboard, at: 'split'
+
   if %w(test development).include? Rails.env
     mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
     get 'test-saml' => 'test_saml#index'

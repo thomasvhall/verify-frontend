@@ -1,0 +1,8 @@
+<%= page_title 'hub.about.title' %>
+<% content_for :feedback_source, 'ABOUT_PAGE' %>
+
+<p>You choose from a list of companies certified to verify your identity. They’ve all met security standards set by government.</p>
+
+<div class="actions">
+  <%= link_to t('navigation.next'), about_certified_companies_path, class: 'button', id: 'next-button' %>
+</div>
