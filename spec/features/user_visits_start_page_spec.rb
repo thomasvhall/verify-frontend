@@ -77,6 +77,12 @@ RSpec.describe 'When the user visits the start page' do
       expect(page).to have_link 'feedback', href: '/feedback?feedback-source=ERROR_PAGE'
     end
 
+    xit 'will display the missing cookies page when the session id cookie is missing' do
+    end
+
+    xit 'will display the something went wrong page when the session id does not match the cookie value' do
+    end
+
     it 'will display the timeout expiration error when the session start cookie is old' do
       session_id_cookie = create_cookie_hash[CookieNames::SESSION_ID_COOKIE_NAME]
       allow(Rails.logger).to receive(:info)
