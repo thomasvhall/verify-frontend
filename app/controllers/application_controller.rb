@@ -63,11 +63,11 @@ class ApplicationController < ActionController::Base
   end
 
   def selected_answer_store
-    @selected_answer_store ||= SelectedAnswerStore.new(session)
+    journey.selected_answer_store
   end
 
   def selected_evidence
-    selected_answer_store.selected_evidence
+    journey.selected_evidence
   end
 
   def set_journey_hint(entity_id)

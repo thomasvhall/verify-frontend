@@ -137,4 +137,26 @@ RSpec.describe VerifyJourney do
       expect(subject.idp_authn_request).to eql :foo
     end
   end
+
+  describe '#selected_answer_store' do
+    it 'returns a selected answer store built from the session' do
+      factory = double(:selected_answer_store_factory)
+      stub_const("SelectedAnswerStore", factory)
+      selected_answer_store = double(:selected_answer_store)
+      expect(factory).to receive(:new).with(session).and_return selected_answer_store
+      expect(subject.selected_answer_store).to eql selected_answer_store
+    end
+  end
+
+  describe '#selected_evidence' do
+    it 'returns the selected evidence found in the selected answer store' do
+      factory = double(:selected_answer_store_factory)
+      stub_const("SelectedAnswerStore", factory)
+      selected_answer_store = double(:selected_answer_store)
+      expect(factory).to receive(:new).with(session).and_return selected_answer_store
+      selected_evidence = double(:selected_evidence)
+      expect(selected_answer_store).to receive(:selected_evidence).and_return selected_evidence
+      expect(subject.selected_evidence).to eql selected_evidence
+    end
+  end
 end

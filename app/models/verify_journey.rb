@@ -49,6 +49,14 @@ class VerifyJourney
 
   alias_method :transaction_simple_id, :current_transaction_simple_id
 
+  def selected_answer_store
+    @selected_answer_store ||= SelectedAnswerStore.new(session)
+  end
+
+  def selected_evidence
+    selected_answer_store.selected_evidence
+  end
+
 private
 
   attr_reader :session
