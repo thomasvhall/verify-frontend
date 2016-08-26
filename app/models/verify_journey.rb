@@ -34,7 +34,11 @@ class VerifyJourney
   end
 
   def idp_authn_request
-    session_proxy.idp_authn_request(session_id)
+    IdentityProviderRequest.new(
+      session_proxy.idp_authn_request(session_id),
+      selected_idp.simple_id,
+      selected_answer_store.selected_answers
+    )
   end
 
   def current_transaction

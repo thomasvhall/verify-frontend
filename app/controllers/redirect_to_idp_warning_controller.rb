@@ -26,11 +26,7 @@ class RedirectToIdpWarningController < ApplicationController
     idp = decorated_idp
     if idp.viewable?
       select_registration(idp)
-      outbound_saml_message = journey.idp_authn_request
-      idp_request = IdentityProviderRequest.new(
-        outbound_saml_message,
-        idp.simple_id,
-        selected_answer_store.selected_answers)
+      idp_request = journey.idp_authn_request
       render json: idp_request.to_json(methods: :hints)
     else
       render status: :bad_request

@@ -133,15 +133,28 @@ RSpec.describe VerifyJourney do
 
   describe '#idp_authn_request' do
     it 'instructs the session proxy to produce a AuthnRequest for idp' do
-      expect(session_proxy).to receive(:idp_authn_request).with(session_id).and_return :foo
-      expect(subject.idp_authn_request).to eql :foo
+      factory = double(:idp_request_factory)
+      stub_const('IdentityProviderRequest', factory)
+      idp_request = double(:idp_request)
+      idp = double(:idp)
+      selected_answers = double(:selected_answers)
+      selected_answer_store = double(:selected_answer_store)
+      simple_id = double(:simple_id)
+      outbound_saml = double(:outbound_saml)
+      expect(session_proxy).to receive(:idp_authn_request).with(session_id).and_return(outbound_saml)
+      expect(idp).to receive(:simple_id).and_return(simple_id)
+      expect(subject).to receive(:selected_idp).and_return(idp)
+      expect(selected_answer_store).to receive(:selected_answers).and_return(selected_answers)
+      expect(subject).to receive(:selected_answer_store).and_return(selected_answer_store)
+      expect(factory).to receive(:new).with(outbound_saml, simple_id, selected_answers).and_return idp_request
+      expect(subject.idp_authn_request).to eql idp_request
     end
   end
 
   describe '#selected_answer_store' do
     it 'returns a selected answer store built from the session' do
       factory = double(:selected_answer_store_factory)
-      stub_const("SelectedAnswerStore", factory)
+      stub_const('SelectedAnswerStore', factory)
       selected_answer_store = double(:selected_answer_store)
       expect(factory).to receive(:new).with(session).and_return selected_answer_store
       expect(subject.selected_answer_store).to eql selected_answer_store
@@ -151,7 +164,7 @@ RSpec.describe VerifyJourney do
   describe '#selected_evidence' do
     it 'returns the selected evidence found in the selected answer store' do
       factory = double(:selected_answer_store_factory)
-      stub_const("SelectedAnswerStore", factory)
+      stub_const('SelectedAnswerStore', factory)
       selected_answer_store = double(:selected_answer_store)
       expect(factory).to receive(:new).with(session).and_return selected_answer_store
       selected_evidence = double(:selected_evidence)

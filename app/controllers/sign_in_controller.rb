@@ -22,12 +22,7 @@ class SignInController < ApplicationController
   def select_idp_ajax
     select_viewable_idp(params.fetch('entityId')) do |idp|
       sign_in(idp)
-      outbound_saml_message = journey.idp_authn_request
-      provider_request = IdentityProviderRequest.new(
-        outbound_saml_message,
-        idp.simple_id,
-        selected_answer_store.selected_answers
-      )
+      provider_request = journey.idp_authn_request
       render json: provider_request
     end
   end
