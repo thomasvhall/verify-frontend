@@ -26,10 +26,10 @@ class RedirectToIdpWarningController < ApplicationController
     idp = decorated_idp
     if idp.viewable?
       select_registration(idp)
-      outbound_saml_message = SESSION_PROXY.idp_authn_request(session['verify_session_id'])
+      outbound_saml_message = journey.idp_authn_request
       idp_request = IdentityProviderRequest.new(
         outbound_saml_message,
-        selected_identity_provider.simple_id,
+        idp.simple_id,
         selected_answer_store.selected_answers)
       render json: idp_request.to_json(methods: :hints)
     else
@@ -40,7 +40,7 @@ class RedirectToIdpWarningController < ApplicationController
 private
 
   def select_registration(idp)
-    SESSION_PROXY.select_idp(session['verify_session_id'], idp.entity_id, true)
+    journey.confirm_registration(idp)
     set_journey_hint(idp.entity_id)
     register_idp_selections(idp.display_name)
   end
@@ -59,11 +59,11 @@ private
   end
 
   def decorated_idp
-    @decorated_idp ||= IDENTITY_PROVIDER_DISPLAY_DECORATOR.decorate(selected_identity_provider)
+    @decorated_idp ||= IDENTITY_PROVIDER_DISPLAY_DECORATOR.decorate(journey.selected_idp)
   end
 
   def other_ways_description
-    @other_ways_description = current_transaction.other_ways_description
+    @other_ways_description = journey.transaction.other_ways_description
   end
 
   def user_has_no_docs_or_foreign_id_only?

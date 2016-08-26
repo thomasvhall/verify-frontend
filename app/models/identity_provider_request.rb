@@ -1,7 +1,7 @@
 class IdentityProviderRequest
   attr_reader :location, :saml_request, :relay_state, :registration, :hints, :language_hint
 
-  def initialize(outbound_saml_message, simple_id, answers)
+  def initialize(outbound_saml_message, simple_id, answers = [])
     @location = outbound_saml_message.location
     @saml_request = outbound_saml_message.saml_request
     @relay_state = outbound_saml_message.relay_state

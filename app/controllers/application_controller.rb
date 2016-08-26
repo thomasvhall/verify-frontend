@@ -23,11 +23,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_transaction
-    @current_transaction ||= RP_DISPLAY_REPOSITORY.fetch(current_transaction_simple_id)
+    journey.transaction
   end
 
   def current_transaction_simple_id
-    session[:transaction_simple_id]
+    journey.transaction_simple_id
   end
 
   def store_locale_in_cookie
@@ -50,6 +50,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def journey
+    @journey ||= VerifyJourney.new(session, SESSION_PROXY, RP_DISPLAY_REPOSITORY)
+  end
+
   def set_secure_cookie(name, value)
     cookies[name] = {
       value: value,
@@ -66,8 +70,8 @@ class ApplicationController < ActionController::Base
     selected_answer_store.selected_evidence
   end
 
-  def set_journey_hint(idp_entity_id)
-    cookies.encrypted[CookieNames::VERIFY_FRONT_JOURNEY_HINT] = { entity_id: idp_entity_id }.to_json
+  def set_journey_hint(entity_id)
+    cookies.encrypted[CookieNames::VERIFY_FRONT_JOURNEY_HINT] = { entity_id: entity_id }.to_json
   end
 
 private
@@ -127,12 +131,11 @@ private
   end
 
   def selected_identity_provider
-    IdentityProvider.from_session(session.fetch(:selected_idp))
+    journey.selected_idp
   end
 
   def current_identity_providers
-    session[:identity_providers] ||= SESSION_PROXY.identity_providers(session['verify_session_id'])
-    @current_identity_providers ||= session[:identity_providers].map { |obj| IdentityProvider.from_session(obj) }
+    journey.identity_providers
   end
 
   def report_to_analytics(action_name)
@@ -145,7 +148,7 @@ private
 
   def select_viewable_idp(entity_id)
     for_viewable_idp(entity_id) do |decorated_idp|
-      session[:selected_idp] = decorated_idp.identity_provider
+      journey.select_idp(decorated_idp.identity_provider)
       yield decorated_idp
     end
   end

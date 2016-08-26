@@ -5,8 +5,8 @@ class ChooseACertifiedCompanyController < ApplicationController
   end
 
   def select_idp
-    select_viewable_idp(params.fetch('entity_id')) do |decorated_idp|
-      recommended = IDP_RECOMMENDATION_GROUPER.recommended?(decorated_idp.identity_provider, selected_evidence, current_identity_providers, current_transaction_simple_id)
+    select_viewable_idp(params.fetch('entity_id')) do |selected_idp|
+      recommended = IDP_RECOMMENDATION_GROUPER.recommended?(selected_idp.identity_provider, selected_evidence, journey.identity_providers, journey.transaction_simple_id)
       session[:selected_idp_was_recommended] = recommended
 
       store_selected_idp_index
@@ -18,10 +18,10 @@ class ChooseACertifiedCompanyController < ApplicationController
 
   def about
     simple_id = params[:company]
-    matching_idp = current_identity_providers.detect { |idp| idp.simple_id == simple_id }
+    matching_idp = journey.identity_providers.detect { |idp| idp.simple_id == simple_id }
     @idp = IDENTITY_PROVIDER_DISPLAY_DECORATOR.decorate(matching_idp)
     if @idp.viewable?
-      @recommended = IDP_RECOMMENDATION_GROUPER.recommended?(@idp, selected_evidence, current_identity_providers, current_transaction_simple_id)
+      @recommended = IDP_RECOMMENDATION_GROUPER.recommended?(@idp, selected_evidence, journey.identity_providers, journey.transaction_simple_id)
       render 'about'
     else
       render 'errors/404', status: 404
@@ -31,7 +31,7 @@ class ChooseACertifiedCompanyController < ApplicationController
 private
 
   def grouped_identity_providers
-    IDP_RECOMMENDATION_GROUPER.group_by_recommendation(selected_evidence, current_identity_providers, current_transaction_simple_id)
+    IDP_RECOMMENDATION_GROUPER.group_by_recommendation(selected_evidence, journey.identity_providers, journey.transaction_simple_id)
   end
 
   def store_selected_idp_index
