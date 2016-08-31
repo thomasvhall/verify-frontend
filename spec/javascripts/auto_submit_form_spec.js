@@ -1,6 +1,3 @@
-//= require jquery
-//= require 'auto_submit_form'
-
 describe('auto', function () {
 
   var $dom, formSpy;

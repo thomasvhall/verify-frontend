@@ -1,8 +1,4 @@
-//= require jquery
-//= require continue_to_idp.js
-//= require mock-ajax
-
-describe('Continue to IDP', function () {
+xdescribe('Continue to IDP', function () {
   var $dom,
       $formButton,
       apiPath = '/foobar',
