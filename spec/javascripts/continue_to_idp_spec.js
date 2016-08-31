@@ -1,4 +1,4 @@
-xdescribe('Continue to IDP', function () {
+describe('Continue to IDP', function () {
   var $dom,
       $formButton,
       apiPath = '/foobar',
@@ -33,12 +33,12 @@ xdescribe('Continue to IDP', function () {
   afterEach(function () {
     $dom.remove();
     jasmine.Ajax.uninstall();
-    $(document).off('submit');
+    document.onsubmit = null;
   });
 
   describe('when the form is submitted', function () {
     it('should PUT via AJAX to /foobar', function () {
-      $(document).submit(formSpy);
+      document.onsubmit = formSpy;
       jasmine.Ajax.stubRequest(apiPath);
       $formButton.click();
       jasmine.Ajax.requests.mostRecent().respondWith({
@@ -52,7 +52,7 @@ xdescribe('Continue to IDP', function () {
       expect(jasmine.Ajax.requests.mostRecent().params).toBe('{"entityId":"idcorpzwei-entity-id"}');
     });
     it('should populate the SAML request form with the AJAX response and submit it', function () {
-      $(document).submit(formSpy);
+      document.onsubmit = formSpy;
       jasmine.Ajax.stubRequest(apiPath);
 
       $formButton.click();
@@ -79,10 +79,10 @@ xdescribe('Continue to IDP', function () {
 
     it('should submit IDP choice if AJAX request fails', function () {
       var selectIdpFormSubmitted = [];
-      $(document).submit(function(e) {
+      document.onsubmit = function(e) {
         e.preventDefault();
         selectIdpFormSubmitted.push(e.target.className);
-      });
+      };
       jasmine.Ajax.stubRequest(apiPath);
 
       $formButton.click();
