@@ -40,7 +40,7 @@ RSpec.describe 'when user visits sign-in page with an unavailable IDP configured
 
   context 'API does not return IDP as available' do
     before(:each) do
-      stub_federation
+      set_stub_federation_in_session
       given_api_requests_have_been_mocked!
       given_im_on_the_sign_in_page
     end

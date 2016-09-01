@@ -21,28 +21,6 @@ module ApiTestHelper
     stub_request(:get, api_transactions_endpoint).to_return(body: transactions.to_json, status: 200)
   end
 
-  def stub_federation(idp_entity_id = 'http://idcorp.com', transaction_entity_id = 'some-entity-id')
-    idps = [
-        { 'simpleId' => 'stub-idp-one', 'entityId' => idp_entity_id },
-        { 'simpleId' => 'stub-idp-two', 'entityId' => 'other-entity-id' },
-        { 'simpleId' => 'stub-idp-three', 'entityId' => 'a-different-entity-id' },
-        { 'simpleId' => 'stub-idp-demo', 'entityId' => 'demo-entity-id' }
-    ]
-    body = { 'idps' => idps, 'transactionSimpleId' => 'test-rp', 'transactionEntityId' => transaction_entity_id }
-    stub_request(:get, api_uri(federation_info_endpoint(default_session_id))).to_return(body: body.to_json)
-  end
-
-  def stub_federation_no_docs
-    idps = [
-        { 'simpleId' => 'stub-idp-one', 'entityId' => 'http://idcorp.com' },
-        { 'simpleId' => 'stub-idp-no-docs', 'entityId' => 'http://idcorp.nodoc.com' },
-        { 'simpleId' => 'stub-idp-two', 'entityId' => 'other-entity-id' },
-        { 'simpleId' => 'stub-idp-three', 'entityId' => 'a-different-entity-id' }
-    ]
-    body = { 'idps' => idps, 'transactionSimpleId' => 'test-rp', 'transactionEntityId' => 'some-id' }
-    stub_request(:get, api_uri(federation_info_endpoint(default_session_id))).to_return(body: body.to_json)
-  end
-
   def stub_federation_unavailable
     idps = [
         { 'simpleId' => 'stub-idp-one', 'entityId' => 'http://idcorp.com' },

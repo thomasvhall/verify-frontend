@@ -102,7 +102,7 @@ RSpec.describe 'When the user visits the redirect to IDP warning page' do
   end
 
   it 'goes to "redirect-to-idp" page on submit' do
-    stub_federation
+    set_stub_federation_in_session
     given_a_session_with_document_answers
 
     visit '/redirect-to-idp-warning'
@@ -121,7 +121,7 @@ RSpec.describe 'When the user visits the redirect to IDP warning page' do
   end
 
   it 'goes to "redirect-to-idp" page on submit for non-recommended idp' do
-    stub_federation
+    set_stub_federation_in_session
     given_a_session_with_non_recommended_idp
 
     visit '/redirect-to-idp-warning'
@@ -181,7 +181,7 @@ RSpec.describe 'When the user visits the redirect to IDP warning page' do
   context 'with JS enabled', js: true do
     it 'will redirect the user to the IDP on Continue' do
       piwik_registration_virtual_page = stub_registration_piwik_report(selected_answers, true)
-      stub_federation
+      set_stub_federation_in_session
       given_a_session_with_document_answers
       visit '/redirect-to-idp-warning'
 
@@ -202,7 +202,7 @@ RSpec.describe 'When the user visits the redirect to IDP warning page' do
     end
 
     it 'will redirect the user to the IDP without sending hints when they are disabled' do
-      stub_federation
+      set_stub_federation_in_session
       given_a_session_with_a_hints_disabled_idp
       visit '/redirect-to-idp-warning'
 

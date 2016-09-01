@@ -7,7 +7,7 @@ RSpec.describe 'When the user visits the why companies page' do
   end
 
   it 'includes the appropriate feedback source' do
-    stub_federation
+    set_stub_federation_in_session
     visit '/why-companies'
 
     expect_feedback_source_to_be(page, 'WHY_COMPANIES_PAGE')

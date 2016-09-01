@@ -4,7 +4,7 @@ require 'piwik_test_helper'
 
 RSpec.describe 'user visits further information page' do
   before(:each) do
-    stub_federation
+    set_stub_federation_in_session
     page.set_rack_session(transaction_simple_id: 'test-rp')
     set_session_and_session_cookies!
   end

@@ -5,7 +5,7 @@ require 'api_test_helper'
 
 RSpec.describe 'when user submits start page form' do
   it 'will display about page when user chooses yes (registration)' do
-    stub_federation
+    set_stub_federation_in_session
     stub_request(:get, INTERNAL_PIWIK.url)
     set_session_and_session_cookies!
     visit '/start'
@@ -15,7 +15,7 @@ RSpec.describe 'when user submits start page form' do
   end
 
   it 'will display sign in with IDP page when user chooses sign in' do
-    stub_federation
+    set_stub_federation_in_session
     set_session_and_session_cookies!
     visit '/start'
     choose('start_form_selection_false')
@@ -34,7 +34,7 @@ RSpec.describe 'when user submits start page form' do
   it 'will report user choice to analytics when user chooses no (sign in)' do
     set_session_and_session_cookies!
     page.set_rack_session(transaction_simple_id: 'test-rp')
-    stub_federation
+    set_stub_federation_in_session
     stub_request(:get, INTERNAL_PIWIK.url).with(query: hash_including({}))
     visit '/start'
     choose('start_form_selection_false')
