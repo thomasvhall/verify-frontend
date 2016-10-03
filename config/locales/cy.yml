@@ -115,14 +115,12 @@ cy:
     select_documents:
       title: Dewiswch yr holl ddogfennau sydd gennych
       explanation: Mae cwmnïau ardystiedig yn defnyddio gwybodaeth o wahanol ddogfennau hunaniaeth i’ch dilysu.
-      no_documents_message: Mae eich dewisiadau dogfennau wedi cael eu gosod i ‘na’.
       legend: Ydy’r dogfennau hyn gyda chi?
       documents_option_yes: Ydy
       question:
         driving_licence: Trwydded yrru llun y DU, llawn neu dros dro (ac eithrio Gogledd Iwerddon)
         passport: Pasport y DU
         non_uk_id_document: Dogfen hunaniaeth o wlad arall (pasport, cerdyn ID neu drwydded yrru)
-        no_documents: Nid oes gennyf y dogfennau hyn gyda mi
       errors:
         no_selection: Dewiswch y dogfennau sydd gennych
         invalid_selection: Edrychwch dros eich dewis

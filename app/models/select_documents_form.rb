@@ -1,7 +1,7 @@
 class SelectDocumentsForm
   include ActiveModel::Model
 
-  attr_reader :driving_licence, :passport, :non_uk_id_document, :no_documents
+  attr_reader :driving_licence, :passport, :non_uk_id_document
   validate :one_must_be_present
   validate :mandatory_fields_present, unless: :all_fields_blank?
   validate :no_contradictory_inputs
@@ -10,16 +10,13 @@ class SelectDocumentsForm
     @driving_licence = hash[:driving_licence]
     @passport = hash[:passport]
     @non_uk_id_document = hash[:non_uk_id_document]
-    @no_documents = hash[:no_documents]
   end
 
   def selected_answers
     answers = {}
     IdpEligibility::Evidence::DOCUMENT_ATTRIBUTES.each do |attr|
       result = public_send(attr)
-      if no_documents_checked?
-        answers[attr] = false
-      elsif %w(true false).include?(result)
+      if %w(true false).include?(result)
         answers[attr] = (result == 'true')
       end
     end
@@ -38,22 +35,12 @@ private
     field_attributes.all?(&:blank?)
   end
 
-  def no_contradictory_inputs
-    if no_documents_checked? && any_yes_answers?
-      errors.add(:base, I18n.t('hub.select_documents.errors.invalid_selection'))
-    end
-  end
-
   # If the user hasn't selected "yes" as the answer to any of the document questions then
   # they must answer no for all of the document questions, or select "no docs"
   def mandatory_fields_present
-    unless any_yes_answers? || all_no_answers? || no_documents_checked?
+    unless any_yes_answers? || all_no_answers?
       add_documents_error
     end
-  end
-
-  def no_documents_checked?
-    no_documents == 'true'
   end
 
   def all_no_answers?

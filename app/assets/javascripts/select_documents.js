@@ -4,36 +4,10 @@
   var $ = global.jQuery;
 
   var selectDocuments = {
-    markAllAsNo: function() {
-      // Mark all documents as 'No' when "I don't have documents" is selected
-      var $checkbox = $(this);
-      var checkboxValue = $checkbox.prop('checked');
-      var $noAnswers = selectDocuments.$form.find('input[type=radio][value=false]');
-
-      if (checkboxValue === true) {
-        $noAnswers.trigger('click');
-        selectDocuments.speakWarningMessage();
-      } else {
-        selectDocuments.$noDocumentsMessage.empty();
-      }
-    },
-    unCheckNoDocuments: function() {
-      // Un check "I don't have documents" if the user selects a document
-      var $checkbox = selectDocuments.$form.find('.js-no-docs:checked');
-      $checkbox.prop('checked',false);
-      $checkbox.parent('.block-label').removeClass('selected');
-    },
-    speakWarningMessage: function(){
-      // let screenreader users know their choices have changed by reading a notice
-      selectDocuments.$noDocumentsMessage.text(selectDocuments.$noDocumentsMessage.data('no-documents-message'));
-    },
     init: function (){
       selectDocuments.$form = $('#validate-documents');
-      selectDocuments.$noDocumentsMessage = $('#no-documents-message');
 
       if (selectDocuments.$form.length === 1) {
-        selectDocuments.$form.find('.js-no-docs').on('click',selectDocuments.markAllAsNo);
-        selectDocuments.$form.find('input[type=radio][value=true]').on('click',selectDocuments.unCheckNoDocuments);
 
         $.validator.addMethod('selectDocumentsValidation', function(value, element) {
           var numberOfDocumentQuestions = 3;
