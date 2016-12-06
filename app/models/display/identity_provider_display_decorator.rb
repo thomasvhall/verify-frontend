@@ -8,7 +8,13 @@ module Display
 
     def decorate_collection(idp_list)
       # We need to randomise the order of IDPs so that it satisfies the need for us to be unbiased in displaying the IDPs.
-      idp_list.map { |idp| correlate_display_data(idp) }.select(&:viewable?).shuffle
+      decorate_idps(idp_list).shuffle
+    end
+
+    def decorate_collection_with_rank(idp_list, rank)
+      return decorate_collection(idp_list) if rank.nil?
+
+      decorate_idps(idp_list).sort_by { |idp| rank.find_index(idp.simple_id.to_s) || 1000 }
     end
 
     def decorate(idp)
@@ -16,6 +22,10 @@ module Display
     end
 
   private
+
+    def decorate_idps(idp_list)
+      idp_list.map { |idp| correlate_display_data(idp) }.select(&:viewable?)
+    end
 
     def correlate_display_data(idp)
       return not_viewable(idp) if idp.nil?

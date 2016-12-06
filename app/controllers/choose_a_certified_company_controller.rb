@@ -1,7 +1,9 @@
 class ChooseACertifiedCompanyController < ApplicationController
   def index
     grouped_identity_providers = select_idp_recommendation.group_by_recommendation(selected_evidence, current_identity_providers, current_transaction_simple_id)
-    @recommended_idps = IDENTITY_PROVIDER_DISPLAY_DECORATOR.decorate_collection(grouped_identity_providers.recommended)
+    ranking = IDP_RANKER.rank(selected_evidence)
+    #@recommended_idps = IDENTITY_PROVIDER_DISPLAY_DECORATOR.decorate_collection(grouped_identity_providers.recommended)
+    @recommended_idps = IDENTITY_PROVIDER_DISPLAY_DECORATOR.decorate_collection_with_rank(grouped_identity_providers.recommended, ranking)
     @non_recommended_idps = IDENTITY_PROVIDER_DISPLAY_DECORATOR.decorate_collection(grouped_identity_providers.non_recommended)
   end
 

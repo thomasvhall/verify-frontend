@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'yaml_loader'
 
 Rails.application.config.after_initialize do
@@ -59,4 +60,8 @@ Rails.application.config.after_initialize do
   )
   IDP_HINTS_CHECKER_B = IdpEligibility::IdpHintsChecker.new(loaded_profile_filters_b.idps_with_hints)
   IDP_LANGUAGE_HINT_CHECKER_B = IdpEligibility::IdpHintsChecker.new(loaded_profile_filters_b.idps_with_language_hint)
+
+  # HACKY ranker
+  idp_rankings = YAML.load_file(CONFIG.idp_rankings)
+  IDP_RANKER = IdpRanker.new(idp_rankings['rankings'])
 end
