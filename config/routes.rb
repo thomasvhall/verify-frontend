@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   if %w(test development).include? Rails.env
     mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
     get 'test-saml' => 'test_saml#index'
+    post 'test-saml' => 'test_saml#index'
     post 'test-rp', to: proc { |_| [200, {}, ['OK']] }
     post 'test-idp-request-endpoint' => 'test_saml#idp_request'
     post 'another-idp-endpoint' => 'test_saml#idp_request'

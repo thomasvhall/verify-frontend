@@ -3,6 +3,7 @@
 require 'sinatra'
 
 class StubApi < Sinatra::Base
+  
   post '/api/session' do
     status 201
     '{
@@ -33,17 +34,33 @@ class StubApi < Sinatra::Base
 
   get '/api/session/:session_id/idp-authn-request' do
     '{
-      "location":"http://localhost:50300/test-saml",
+      "location":"/test-saml",
       "samlRequest":"blah",
       "relayState":"whatever",
-      "registration":false
+      "registration":true
     }'
   end
 
   put '/api/session/:session_id/idp-authn-response' do
+    # set isRegistration to false to simulate a sign-in journey
     '{
-      "idpResult":"blah",
-      "isRegistration":false
+      "idpResult":"SUCCESS",
+      "isRegistration":true
+    }'
+  end
+
+  get '/api/session/:session_id/matching-outcome' do
+    # see response_processing_controller.rb for different outcomes that can be triggered
+    '{
+      "outcome":"SEND_SUCCESSFUL_MATCH_RESPONSE_TO_TRANSACTION"
+    }'
+  end
+
+  get '/api/session/:session_id/response-for-rp/success' do
+    '{
+      "samlMessage":"saml_message",
+      "relayState":"relay_state",
+      "postEndpoint":"/test-saml"
     }'
   end
 

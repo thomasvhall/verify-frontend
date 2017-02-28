@@ -1,4 +1,5 @@
 class TestSamlController < ApplicationController
+  skip_before_action :verify_authenticity_token
   skip_before_action :validate_session
   skip_after_action :store_locale_in_cookie
   layout 'test'
