@@ -13,6 +13,14 @@ RSpec.describe 'when user submits start page form' do
     expect(current_path).to eq('/about')
   end
 
+  it 'will display about page when user chooses yes in welsh (registration)' do
+    stub_request(:get, INTERNAL_PIWIK.url)
+    visit '/dechrau'
+    choose('start_form_selection_true')
+    click_button('next-button')
+    expect(current_path).to eq('/am')
+  end
+
   it 'will display sign in with IDP page when user chooses sign in' do
     visit '/start'
     choose('start_form_selection_false')

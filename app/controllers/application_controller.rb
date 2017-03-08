@@ -1,4 +1,5 @@
 require 'redirect_with_see_other'
+require 'journeys'
 class ApplicationController < ActionController::Base
   before_action :validate_session
   # Prevent CSRF attacks by raising an exception.
@@ -71,14 +72,24 @@ class ApplicationController < ActionController::Base
     cookies.encrypted[CookieNames::VERIFY_FRONT_JOURNEY_HINT] = { entity_id: idp_entity_id }.to_json
   end
 
-  def next_page
-    journeys = {
-      about_path => about_certified_companies_path,
-      about_certified_companies_path => about_identity_accounts_path,
-      about_identity_accounts_path => about_choosing_a_company_path,
-      about_choosing_a_company_path => will_it_work_for_me_path
-    }
-    journeys[request.path]
+  def next_page(*conditions)
+    journeys = Journeys.new({
+      start_path => lambda do |form|
+        return about_path if form.registration?
+        return sign_in_path
+      end,
+      about_path => lambda { about_certified_companies_path },
+      about_certified_companies_path => lambda { about_identity_accounts_path },
+      about_identity_accounts_path => lambda { about_choosing_a_company_path },
+      about_choosing_a_company_path => lambda { will_it_work_for_me_path },
+      will_it_work_for_me_path => lambda do |form|
+        return select_documents_path if form.resident_last_12_months? && form.above_age_threshold?
+        return may_not_work_if_you_live_overseas_path if form.address_but_not_resident?
+        return will_not_work_without_uk_address_path if form.no_uk_address?
+        return why_might_this_not_work_for_me_path
+      end
+    })
+    journeys.find_matching_page(request.path, conditions)
   end
 
 private
