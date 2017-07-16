@@ -58,5 +58,52 @@ module AbTest
         expect(Experiment.new(alternatives)).to_not be_concluded
       end
     end
+
+    context '#rp_included' do
+      alternative_name = nil
+      before(:each) do
+        alternative_name = "experiment-alternative-name"
+      end
+
+      it 'returns single relying party list for matching alternative name' do
+        included_rps = ['rp-one']
+        alternatives = { "test_exeriment" =>
+                             { "alternatives" =>
+                                   [{ "name" => alternative_name,
+                                      "percent" => 100,
+                                      "rp_include" => included_rps }] } }
+
+        expect(Experiment.new(alternatives).rp_include(alternative_name)).to eql(included_rps)
+      end
+
+      it 'returns multiple relying parties list for matching alternative name' do
+        included_rps = ['rp-one', 'rp-two']
+        alternatives = { "test_exeriment" =>
+                             { "alternatives" =>
+                                   [{ "name" => alternative_name,
+                                      "percent" => 100,
+                                      "rp_include" => included_rps }] } }
+
+        expect(Experiment.new(alternatives).rp_include(alternative_name)).to eql(included_rps)
+      end
+
+      it 'returns empty list for matching alternative name when no relying parties are included' do
+        alternatives = { "test_exeriment" =>
+                             { "alternatives" =>
+                                   [{ "name" => alternative_name,
+                                      "percent" => 100 }] } }
+
+        expect(Experiment.new(alternatives).rp_include(alternative_name)).to eql([])
+      end
+
+      it 'returns empty list when alternative name does not match' do
+        alternatives = { "test_exeriment" =>
+                             { "alternatives" =>
+                                   [{ "name" => alternative_name,
+                                      "percent" => 100 }] } }
+
+        expect(Experiment.new(alternatives).rp_include('NON EXISTENT NAME')).to eql([])
+      end
+    end
   end
 end

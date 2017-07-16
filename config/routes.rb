@@ -1,3 +1,5 @@
+require 'route_matcher'
+
 Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -6,14 +8,15 @@ Rails.application.routes.draw do
   # root 'welcome#index'
   PROOF_OF_ADDRESS_EXPERIMENT = 'proof_of_address'.freeze
 
-  report_to_piwik = -> (experiment_name, reported_alternative, transaction_id, request) {
-    AbTest.report(experiment_name, reported_alternative, transaction_id, request)
-  }
+  report_to_piwik = RouteMatcher::ReportToPiwik.curry.(PROOF_OF_ADDRESS_EXPERIMENT)
 
-  proof_of_address_a_and_report_to_piwik = SelectRoute.new(PROOF_OF_ADDRESS_EXPERIMENT, 'control', report_to_piwik)
-  proof_of_address_b_and_report_to_piwik = SelectRoute.new(PROOF_OF_ADDRESS_EXPERIMENT, 'variant', report_to_piwik)
-  proof_of_address_a = SelectRoute.new(PROOF_OF_ADDRESS_EXPERIMENT, 'control')
-  proof_of_address_b = SelectRoute.new(PROOF_OF_ADDRESS_EXPERIMENT, 'variant')
+  control_group = RouteMatcher::AbTestCookieMatchesExperiment.curry.(experiment_name: PROOF_OF_ADDRESS_EXPERIMENT, alternative: 'control')
+  variant_group = RouteMatcher::AbTestCookieMatchesExperiment.curry.(experiment_name: PROOF_OF_ADDRESS_EXPERIMENT, alternative: 'variant')
+
+  proof_of_address_a_and_report_to_piwik = SelectRoute.new(control_group, report_to_piwik)
+  proof_of_address_b_and_report_to_piwik = SelectRoute.new(variant_group, report_to_piwik)
+  proof_of_address_a = SelectRoute.new(control_group)
+  proof_of_address_b = SelectRoute.new(variant_group)
 
   post 'SAML2/SSO' => 'authn_request#rp_request'
   post 'SAML2/SSO/Response/POST' => 'authn_response#idp_response'
