@@ -39,7 +39,7 @@ experiments:
           percent: 33
         - name: 'variant_heading_website'
           percent: 33
-  - app_transparency:
+  - app_transparency_v2:
         alternatives:
           - name: 'control'
             percent: 50
